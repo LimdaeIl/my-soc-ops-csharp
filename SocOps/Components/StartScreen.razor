@@ -1,22 +1,42 @@
-<div class="flex flex-col items-center justify-center min-h-full p-6 bg-gray-50">
-    <div class="text-center max-w-sm">
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">Soc Ops</h1>
-        <p class="text-lg text-gray-600 mb-8">Social Bingo</p>
+<div class="flex flex-col items-center justify-center min-h-full bg-gradient-to-b from-sky-400 to-sky-200" style="background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 100%);">
+    <!-- Mining Camp Banner -->
+    <div class="mc-panel p-6 rounded mb-8 max-w-md animate-mc-place text-center">
+        <h1 class="mc-title mb-2">MINING TIME</h1>
+        <p class="mc-subtitle text-lg font-bold" style="color: #ffff00; text-shadow: 2px 2px 0 rgba(0,0,0,0.8);">Social Bingo Edition</p>
+    </div>
 
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
-            <h2 class="font-semibold text-gray-800 mb-3">How to play</h2>
-            <ul class="text-left text-gray-600 text-sm space-y-2">
-                <li>• Find people who match the questions</li>
-                <li>• Tap a square when you find a match</li>
-                <li>• Get 5 in a row to win!</li>
-            </ul>
+    <!-- How to Play Card -->
+    <div class="mc-panel p-6 rounded mb-8 max-w-md" style="animation: mc-place 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;">
+        <h2 class="text-white font-bold text-xl mb-4" style="text-shadow: 1px 1px 0 rgba(0,0,0,0.8);">⛏️ HOW TO MINE:</h2>
+        <div class="text-left space-y-3 text-white font-semibold" style="text-shadow: 1px 1px 0 rgba(0,0,0,0.8);">
+            <div class="flex items-start gap-2">
+                <span style="color: #ffff00;">▶</span>
+                <span>Find players matching the questions</span>
+            </div>
+            <div class="flex items-start gap-2">
+                <span style="color: #ffff00;">▶</span>
+                <span>TAP a block when you find a match</span>
+            </div>
+            <div class="flex items-start gap-2">
+                <span style="color: #ffff00;">▶</span>
+                <span>Get 5 in a ROW to WIN! 💎</span>
+            </div>
         </div>
+    </div>
 
-        <button
-            @onclick="OnStart"
-            class="w-full bg-accent text-white font-semibold py-4 px-8 rounded-lg text-lg active:bg-accent-light transition-colors">
-            Start Game
-        </button>
+    <!-- Start Button -->
+    <button
+        @onclick="OnStart"
+        class="mc-button px-12 py-4 rounded text-xl font-bold mb-4"
+        style="animation: mc-place 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;">
+        ▶ START MINING ▶
+    </button>
+
+    <!-- Decorative blocks -->
+    <div class="flex gap-4 mt-8">
+        <div class="mc-block mc-grass-block" style="width: 40px; height: 40px;"></div>
+        <div class="mc-block mc-dirt-block" style="width: 40px; height: 40px;"></div>
+        <div class="mc-block mc-diamond-block" style="width: 40px; height: 40px;"></div>
     </div>
 </div>
 
