@@ -6,10 +6,10 @@
     class="@GetCssClasses()"
     aria-pressed="@Square.IsMarked"
     aria-label="@(Square.IsFreeSpace ? "Free space" : Square.Text)">
-    <span class="wrap-break-word hyphens-auto">@Square.Text</span>
+    <span class="wrap-break-word hyphens-auto text-xs leading-tight">@Square.Text</span>
     @if (Square.IsMarked && !Square.IsFreeSpace)
     {
-        <span class="absolute top-0.5 right-0.5 text-green-600 text-xs">✓</span>
+        <span class="absolute top-0.5 right-0.5 text-lg" style="animation: mc-place 0.3s ease-out;">⛏️</span>
     }
 </button>
 
@@ -23,18 +23,29 @@
     [Parameter]
     public EventCallback OnClick { get; set; }
 
+    private string GetBlockClass()
+    {
+        if (Square.IsFreeSpace) return "mc-grass-block";
+        
+        return (Square.Id % 4) switch
+        {
+            0 => "mc-grass-block",
+            1 => "mc-dirt-block",
+            2 => "mc-stone-block",
+            _ => "mc-diamond-block"
+        };
+    }
+
     private string GetCssClasses()
     {
-        var baseClasses = "relative flex items-center justify-center p-1 text-center border border-gray-300 rounded transition-all duration-150 select-none min-h-[60px] text-xs leading-tight";
-
+        var baseClasses = "relative flex items-center justify-center p-2 text-center border-2 select-none min-h-[70px] mc-block font-bold";
+        var blockClass = GetBlockClass();
         var stateClasses = Square.IsMarked
             ? IsWinning
-                ? "bg-amber-200 border-amber-400 text-amber-900"
-                : "bg-marked border-marked-border text-green-800"
-            : "bg-white text-gray-700 active:bg-gray-100";
+                ? "animate-mc-break"
+                : "opacity-90 scale-95"
+            : "";
 
-        var freeSpaceClasses = Square.IsFreeSpace ? "font-bold text-sm" : "";
-
-        return $"{baseClasses} {stateClasses} {freeSpaceClasses}";
+        return $"{baseClasses} {blockClass} {stateClasses}";
     }
 }

@@ -1,36 +1,43 @@
 @using SocOps.Models
 
-<div class="flex flex-col min-h-full bg-gray-50">
-    <!-- Header -->
-    <header class="flex items-center justify-between p-3 bg-white border-b border-gray-200">
-        <button
-            @onclick="OnReset"
-            class="text-gray-500 text-sm px-3 py-1.5 rounded active:bg-gray-100">
-            ← Back
-        </button>
-        <h1 class="font-bold text-gray-900">Soc Ops</h1>
-        <div class="w-16"></div>
+<div class="flex flex-col min-h-full" style="background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 100%);">
+    <!-- Minecraft Toolbar / Crafting Table -->
+    <header class="mc-panel">
+        <div class="flex items-center justify-between p-2">
+            <button
+                @onclick="OnReset"
+                class="mc-button px-3 py-2 rounded text-xs font-bold">
+                ◀ QUIT MINE
+            </button>
+            <h1 class="mc-title" style="font-size: 1.5rem; margin: 0;">⛏ MINING ⛏</h1>
+            <div class="w-20"></div>
+        </div>
     </header>
 
-    <!-- Instructions -->
-    <p class="text-center text-gray-500 text-sm py-2 px-4">
-        Tap a square when you find someone who matches it.
-    </p>
+    <!-- Mining Status / Instructions -->
+    <div class="text-center py-2 px-4 text-white font-bold" style="background: linear-gradient(90deg, #8b7355 0%, #6b5344 100%); text-shadow: 1px 1px 0 rgba(0,0,0,0.8);">
+        Find players who match! Tap blocks to mark. Get 5 in a row to WIN! 💎
+    </div>
 
-    <!-- Bingo indicator -->
+    <!-- Bingo Indicator (Mining Success) -->
     @if (HasBingo)
     {
-        <div class="bg-amber-100 text-amber-800 text-center py-2 font-semibold text-sm">
-            🎉 BINGO! You got a line!
+        <div class="bg-yellow-300 text-black text-center py-3 font-bold text-lg" style="font-family: 'Courier New', monospace; text-shadow: 1px 1px 0 rgba(0,0,0,0.5); animation: mc-place 0.4s ease-out;">
+            🎉 ⛏ JACKPOT! YOU FOUND DIAMONDS! ⛏ 🎉
         </div>
     }
 
-    <!-- Board -->
-    <div class="flex-1 flex items-center justify-center p-3">
-        <BingoBoard
-            Board="@Board"
-            WinningSquareIds="@WinningSquareIds"
-            OnSquareClick="@OnSquareClick" />
+    <!-- Crafting Grid (Bingo Board) -->
+    <div class="flex-1 flex items-center justify-center p-4">
+        <div class="mc-crafting-grid grid grid-cols-5 rounded">
+            @foreach (var square in Board)
+            {
+                <BingoSquare
+                    Square="@square"
+                    IsWinning="@WinningSquareIds.Contains(square.Id)"
+                    OnClick="@(() => OnSquareClick.InvokeAsync(square.Id))" />
+            }
+        </div>
     </div>
 </div>
 
