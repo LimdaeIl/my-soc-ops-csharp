@@ -1,210 +1,153 @@
-# Soc Ops – Copilot Workspace Instructions
+# Soc Ops – Workspace Instructions
 
-**Soc Ops** is a Social Bingo game built with **Blazor WebAssembly (.NET 10)** for in-person team building events. Find people who match questions, mark squares, and get 5 in a row to win. This workspace is designed for AI-assisted development with specialized instructions for frontend work and a 5-part learning lab.
+🎮 **Soc Ops** is a Blazor WebAssembly (.NET 10) Social Bingo game for team building. Find people matching questions, mark squares, get 5 in a row to win.
 
 ---
 
-## Quick Start
+## 🚨 MANDATORY PRE-COMMIT CHECKLIST
+
+Before committing any changes:
 
 ```bash
-# Build
-cd SocOps && dotnet build
+# 1. Build
+dotnet build SocOps/SocOps.csproj
 
-# Run dev server (http://localhost:5166)
+# 2. Run locally (optional but recommended)
 cd SocOps && dotnet run
 
-# Run tests (when applicable)
-dotnet test
+# 3. Code quality checks
+- No unused variables, imports, or dead code
+- CSS utilities composed (no inline styles)
+- Blazor components follow single-responsibility
+- State changes trigger BingoGameService events
 ```
+
+**Commit only when all checks pass.** Failed builds block deployment to GitHub Pages.
 
 ---
 
-## Architecture & File Structure
+## Architecture Overview
 
 ```
 SocOps/
-├── Components/          # Reusable Blazor components
-│   ├── GameScreen.razor     # Main game board display
-│   ├── StartScreen.razor    # Welcome & setup screen
-│   ├── BingoBoard.razor     # Grid manager & win detection
-│   ├── BingoSquare.razor    # Individual clickable square
-│   └── BingoModal.razor     # Modal dialogs (rules, etc.)
-├── Services/            # Business logic & state management
-│   ├── BingoGameService.cs     # State & event coordination
-│   └── BingoLogicService.cs    # Win detection, game rules
-├── Models/              # C# data models
-│   ├── GameState.cs        # Game state serialization
-│   ├── BingoSquareData.cs  # Square data & metadata
-│   └── BingoLine.cs        # Win line validation
-├── Data/                # Static data
-│   └── Questions.cs        # Bingo questions & prompts
-├── Layout/              # Global layout components
-│   ├── MainLayout.razor
-│   ├── MainLayout.razor.css
-│   ├── NavMenu.razor
-│   └── NavMenu.razor.css
-├── Pages/               # Routable pages
-│   ├── Home.razor       # Game container
-│   ├── Counter.razor    # Example page
-│   ├── Weather.razor    # Example page
-│   └── NotFound.razor   # 404 handler
-└── wwwroot/             # Static assets
-    ├── css/
-    │   └── app.css          # Custom utility classes (see css-utilities.instructions.md)
-    ├── index.html
-    └── lib/                 # Bootstrap & dependencies
+├── Components/          # Blazor UI (*.razor files)
+│   ├── GameScreen, StartScreen, BingoBoard, BingoSquare, BingoModal
+├── Services/            # Business logic
+│   ├── BingoGameService (state + events)
+│   ├── BingoLogicService (game rules)
+├── Models/              # Data: GameState, BingoSquareData, BingoLine
+├── Data/                # Questions.cs (quiz content)
+├── Pages/               # Routable pages (Home.razor)
+├── Layout/              # MainLayout, NavMenu + CSS
+└── wwwroot/css/app.css  # Custom Tailwind-like utilities
 ```
 
 ---
 
 ## Development Conventions
 
-### C# & Blazor
-
-- **Naming**: PascalCase for public members, camelCase for private/parameters
-- **Nullability**: Enabled (`<Nullable>enable</Nullable>` in .csproj)
-- **Usings**: Implicit (via `<ImplicitUsings>enable</ImplicitUsings>`)
-- **Components**: Use `@inherits`, `@code` blocks; event handlers as `async Task` methods
-- **State**: Managed via `BingoGameService` with event-driven updates
-- **JSInterop**: Used for localStorage persistence; consider abstracting into services
-
-### Styling
-
-- **Framework**: Custom CSS utilities in `wwwroot/css/app.css` (Tailwind-like approach)
-- **Colors**: Defined as CSS variables (e.g., `--color-accent`, `--color-marked`)
-- **Responsive**: Mobile-first using flexbox/grid utilities
-- **See**: [CSS Utilities Instructions](.github/instructions/css-utilities.instructions.md)
-
-### Frontend Design
-
-When redesigning UI or building new components:
-- **Avoid generic aesthetics**: Use distinctive typography, cohesive color themes, and purposeful motion
-- **Maximize impact**: Orchestrate animations for high-impact moments (page load, win states)
-- **Think creatively**: Reference the context (team building, social themes) for design inspiration
-- **See**: [Frontend Design Instructions](.github/instructions/frontend-design.instructions.md)
+| Aspect | Rule |
+|--------|------|
+| **C# Naming** | PascalCase public, camelCase private |
+| **Styling** | Use CSS utilities (app.css); compose, don't inline |
+| **Components** | Inherit `ComponentBase`; use `@code` blocks; event handlers as `async Task` |
+| **State** | Managed via `BingoGameService`; changes fire `OnStateChanged` event |
+| **Responsive** | Mobile-first; test at 320px, 768px, 1200px |
 
 ---
 
-## Development Checklist
+## Quick Commands
 
-Before committing any changes:
+```bash
+cd SocOps
 
-- [ ] `dotnet build SocOps/SocOps.csproj` passes with no errors
-- [ ] No unused variables, imports, or dead code
-- [ ] CSS utilities are used consistently (avoid inline styles)
-- [ ] Blazor components follow single-responsibility principle
-- [ ] State changes trigger `OnStateChanged` events in `BingoGameService`
-- [ ] New features are testable (logic isolated in Services)
+# Build
+dotnet build SocOps.csproj
 
----
+# Run dev server (http://localhost:5166)
+dotnet run
 
-## Learning & Workshop Structure
-
-This workspace includes a **5-part learning lab** in the `workshop/` folder. Each part covers key concepts and includes hands-on tasks using Copilot agents:
-
-| Part | Title | Focus Area |
-|------|-------|-----------|
-| **00** | [Overview & Checklist](../workshop/00-overview.md) | Prerequisites & project setup |
-| **01** | [Setup & Context Engineering](../workshop/01-setup.md) | Workspace instructions, agents, prompts |
-| **02** | [Design-First Frontend](../workshop/02-design.md) | UI redesign with Plan Mode & CSS refinement |
-| **03** | [Custom Quiz Master](../workshop/03-quiz-master.md) | Generative agents for custom themes |
-| **04** | [Multi-Agent Development](../workshop/04-multi-agent.md) | TDD & design patterns with specialized agents |
-
-**Recommended workflow**: Follow the numbered parts sequentially. Each builds on prior context and introduces new agent capabilities.
+# Tests (when applicable)
+dotnet test
+```
 
 ---
 
 ## Specialized Instructions
 
-This workspace includes focused instruction files for specific tasks:
-
 ### Frontend Design
-📄 [.github/instructions/frontend-design.instructions.md](.github/instructions/frontend-design.instructions.md)
-
-Use when designing or building new UI components. Emphasizes creative, distinctive aesthetics over generic "AI slop" patterns.
-
-**Trigger**: "Design/build web components", "redesign the UI", "create a new theme"
+📄 **Use when**: Designing/refactoring Blazor components, creating themed screens, adding animations
+- Activates on: `**/Components/**/*.razor`
+- Focus: Distinctive aesthetics, creative palettes, high-impact animations
 
 ### CSS Utilities
-📄 [.github/instructions/css-utilities.instructions.md](.github/instructions/css-utilities.instructions.md)
+📄 **Use when**: Styling components, creating layouts
+- Reference: Custom Tailwind-like classes in `wwwroot/css/app.css`
+- Best practice: Compose utilities; avoid inline styles
 
-Reference guide for available CSS utility classes. Use when styling components or creating layouts.
+---
+
+## Workshop Lab Structure
+
+5-part learning lab in `workshop/` folder:
+
+| Part | Title | Focus |
+|------|-------|-------|
+| **00** | Overview | Prerequisites & checklist |
+| **01** | Setup & Context | Workspace instructions, agents |
+| **02** | Design-First | UI redesign with Plan Mode |
+| **03** | Quiz Master | Custom quiz themes |
+| **04** | Multi-Agent | TDD & code patterns |
 
 ---
 
 ## Common Workflows
 
-### Add a New Game Feature
+### Add Game Feature
+1. Define state in `Models/`
+2. Add logic in `Services/BingoLogicService.cs`
+3. Expose via `BingoGameService` with event
+4. Create component in `Components/`
+5. Integrate into `GameScreen.razor`
+6. Style with CSS utilities
+7. Build & test: `dotnet build && dotnet run`
 
-1. **Define state** in `SocOps/Models/` (e.g., `NewFeature.cs`)
-2. **Add logic** in `SocOps/Services/BingoLogicService.cs`
-3. **Expose state** via `BingoGameService` with an `event` for changes
-4. **Create component** in `SocOps/Components/` (inherit from `ComponentBase`)
-5. **Integrate** into `GameScreen.razor` or create a new page
-6. **Style** using CSS utilities from `wwwroot/css/app.css`
-7. **Build & test**: `dotnet build && dotnet run`
+### Implement Custom Quiz Theme
+Use **Quiz Master agent** (Part 03) to generate question sets + themed CSS
 
-### Implement a Custom Quiz Theme
-
-Use the **Quiz Master agent** (Part 03 of the lab) to generate:
-- New question sets with custom branding
-- Theme-specific styling (colors, fonts, animations)
-- Component variations (e.g., dark mode, compact layout)
-
-See [03-quiz-master.md](../workshop/03-quiz-master.md) for detailed instructions.
-
-### Refactor or Optimize Components
-
-Use **code review agents** (Part 04 of the lab):
-- **Scavenger Hunt mode**: TDD-style refactoring (Red → Green → Refactor)
-- **Code quality patterns**: Service isolation, testability, separation of concerns
+### Refactor & Optimize
+Use **code review agents** (Part 04) for TDD-style refactoring
 
 ---
 
-## Environment & Tools
+## Environment
 
 - **Framework**: .NET 10 SDK (Blazor WebAssembly)
-- **Language**: C# 13 (with nullable reference types enabled)
-- **Styling**: Custom CSS utilities + Bootstrap (in `wwwroot/lib/`)
-- **Dev Server**: Listens on `http://localhost:5166`
-- **State**: Persisted via browser localStorage
-- **Deployment**: GitHub Pages (automatic on push to `main`)
+- **Language**: C# 13 (nullable refs enabled)
+- **Dev Server**: `http://localhost:5166`
+- **Deployment**: GitHub Pages (auto on push to `main`)
 
 ---
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Build fails | Run `dotnet clean` then `dotnet build SocOps/SocOps.csproj` |
-| Dev server won't start | Check port 5166 is available; verify launchSettings.json exists |
-| Components not updating | Ensure `StateHasChanged()` is called after state changes |
-| CSS not applied | Verify class names match `wwwroot/css/app.css` and are used in components |
-| localStorage errors | Check browser DevTools → Application tab for quota/permissions issues |
-
----
-
-## Integration with Copilot Agents
-
-This workspace is designed to work with Copilot agents via prompts and specialized instructions:
-
-- **`/setup`** prompt: Initial workspace bootstrap and verification
-- **Frontend design instruction**: Triggered for UI/UX tasks
-- **CSS utilities instruction**: Referenced for styling questions
-- **Part-based prompts**: In `workshop/` for guided learning
-
-To invoke an agent: Type `/` in Copilot chat and select the relevant prompt or instruction.
+| Issue | Fix |
+|-------|-----|
+| Build fails | `dotnet clean` then rebuild |
+| Dev server won't start | Check port 5166; verify launchSettings.json |
+| Components not updating | Call `StateHasChanged()` after state changes |
+| CSS not applied | Verify class names match `app.css` |
+| localStorage errors | Check browser DevTools → Application |
 
 ---
 
 ## Resources
 
-- 📖 **Lab Guide**: [workshop/GUIDE.md](../workshop/GUIDE.md)
-- 🎮 **Live Demo**: https://dotnet-presentations.github.io/vscode-github-copilot-agent-lab/
-- 📚 **Official Docs**: [Blazor WebAssembly](https://learn.microsoft.com/en-us/aspnet/core/blazor/webassembly)
-- 🐙 **Contributing**: See [CONTRIBUTING.md](../CONTRIBUTING.md) (Microsoft CLA required)
+- 📖 Lab Guide: [workshop/GUIDE.md](../workshop/GUIDE.md)
+- 🎮 Live Demo: https://dotnet-presentations.github.io/vscode-github-copilot-agent-lab/
+- 📚 Blazor Docs: https://learn.microsoft.com/en-us/aspnet/core/blazor/
+- 🐙 Contributing: [CONTRIBUTING.md](../CONTRIBUTING.md) (Microsoft CLA required)
 
 ---
 
-**Last updated**: April 2026  
-**Maintained by**: Soc Ops Development Team
+**Last updated**: April 2026
